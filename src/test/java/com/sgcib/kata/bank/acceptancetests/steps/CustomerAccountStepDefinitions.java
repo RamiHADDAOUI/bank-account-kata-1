@@ -76,7 +76,12 @@ public class CustomerAccountStepDefinitions {
 		while (scanner.hasNextLine()) {
 			lastPrintedLine = scanner.nextLine();
 		}
-		BigDecimal value = new BigDecimal(lastPrintedLine.split("\\|")[3].replace("€", "").replace(",", ".").trim()).setScale(1);
+		BigDecimal value = new BigDecimal(lastPrintedLine.split("\\|")[3].replace("â‚¬", "").replace(",", ".").trim()).setScale(1);
         Assertions.assertThat(value).isEqualTo(expectedBalance);
+	}
+	
+	@Then("^I would see$")
+	public void i_would_see(String statement){
+		Assertions.assertThat(outContent.toString().trim()).isEqualTo(statement.trim());
 	}
 }
