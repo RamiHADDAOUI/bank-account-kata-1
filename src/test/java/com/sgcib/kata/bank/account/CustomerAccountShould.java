@@ -62,4 +62,14 @@ public class CustomerAccountShould {
         verify(statement, times(0)).addNewStatementLine(new Transaction(amount, LocalDateTime.now(), OperationType.DEPOSIT));
     }
     
+    @Test
+    public void make_a_withdraw_operation() {
+        // GIVEN
+    	Money amount = Money.of(150, EURO);
+        // WHEN
+    	customerAccount.withdraw(amount.negate(), MOCK_DATE);
+        // THEN
+        verify(statement, times(1)).add(OperationType.WITHDRAW, amount, MOCK_DATE);
+    }
+    
 }

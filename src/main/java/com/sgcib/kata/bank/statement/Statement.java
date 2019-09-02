@@ -32,10 +32,18 @@ public class Statement {
 	
 	public void add(OperationType operationType, MonetaryAmount amount, LocalDateTime dateTime) {
 		Transaction transaction = new Transaction(amount, dateTime, operationType);
-		if (amount.isPositive())
-			addNewStatementLine(transaction);
-		else
-			System.err.println("Impossible transaction : negative amount");
+		if (operationType.name().equals("DEPOSIT")) {
+			if (amount.isPositive())
+				addNewStatementLine(transaction);
+			else
+				System.err.println("Impossible transaction : negative amount");
+		} else {
+			if (getBalance().abs().isGreaterThan(amount.abs())) {
+				addNewStatementLine(transaction);
+			} else {
+				System.err.println("Impossible transaction : not enouph money");
+			}
+		}
 	}
 
 	public void addNewStatementLine(Transaction transaction) {

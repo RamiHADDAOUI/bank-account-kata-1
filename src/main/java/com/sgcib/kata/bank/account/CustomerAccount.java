@@ -26,7 +26,7 @@ public class CustomerAccount implements HistorizedAccount {
 
     @Override
     public void withdraw(MonetaryAmount amount, LocalDateTime dateTime) {
-    	//TODO
+    	statement.add(OperationType.WITHDRAW, amount.negate(), dateTime);
     }
     
 	@Override
