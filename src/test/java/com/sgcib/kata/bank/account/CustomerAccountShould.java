@@ -18,6 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.sgcib.kata.bank.statement.Statement;
 import com.sgcib.kata.bank.transaction.OperationType;
+import com.sgcib.kata.bank.transaction.Transaction;
 
 /**
  * @author fahmi
@@ -48,6 +49,17 @@ public class CustomerAccountShould {
     	customerAccount.deposit(amount, MOCK_DATE);
         // THEN
         verify(statement, times(1)).add(OperationType.DEPOSIT, amount, MOCK_DATE);
+    }
+    
+    @Test
+    public void make_a_deposit_operation_with_negative_amount() {
+        // GIVEN
+    	Money amount = Money.of(-100, EURO);
+        // WHEN
+    	customerAccount.deposit(amount, MOCK_DATE);
+        // THEN
+        verify(statement, times(1)).add(OperationType.DEPOSIT, amount, MOCK_DATE);
+        verify(statement, times(0)).addNewStatementLine(new Transaction(amount, LocalDateTime.now(), OperationType.DEPOSIT));
     }
     
 }
