@@ -1,6 +1,8 @@
 package com.sgcib.kata.bank.statement;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
@@ -40,6 +42,27 @@ public class StatementShould {
 		statement.add(OperationType.DEPOSIT, amount, MOCK_DATE);
         // THEN
         Assertions.assertThat(statement.contains(new Transaction(amount, MOCK_DATE, OperationType.DEPOSIT))).isTrue();
+    }
+	
+	@Test
+    public void make_several_operations_and_generate_statement() {
+        // GIVEN
+		statement.add(OperationType.DEPOSIT, Money.of(100, EURO), MOCK_DATE);
+		statement.add(OperationType.DEPOSIT, Money.of(150, EURO), MOCK_DATE);
+		statement.add(OperationType.WITHDRAW, Money.of(50, EURO).negate(), MOCK_DATE);
+		
+		List<StatementLine> expectedResult = new ArrayList<StatementLine>();
+		expectedResult.add(new StatementLine(new Transaction(Money.of(100, EURO), MOCK_DATE, OperationType.DEPOSIT), Money.of(100, EURO)));
+		expectedResult.add(new StatementLine(new Transaction(Money.of(150, EURO), MOCK_DATE, OperationType.DEPOSIT), Money.of(250, EURO)));
+		expectedResult.add(new StatementLine(new Transaction(Money.of(50, EURO).negate(), MOCK_DATE, OperationType.WITHDRAW), Money.of(200, EURO)));
+		 // WHEN
+		List<StatementLine> result = statement.getStatementLines();
+		// THEN
+		Assertions.assertThat(result).hasSize(3);
+		
+		Assertions.assertThat(result.get(0)).isEqualTo(expectedResult.get(0));
+        Assertions.assertThat(result.get(1)).isEqualTo(expectedResult.get(1));
+        Assertions.assertThat(result.get(2)).isEqualTo(expectedResult.get(2));
     }
 	
 }

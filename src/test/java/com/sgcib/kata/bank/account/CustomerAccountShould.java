@@ -72,4 +72,13 @@ public class CustomerAccountShould {
         verify(statement, times(1)).add(OperationType.WITHDRAW, amount, MOCK_DATE);
     }
     
+    @Test
+    public void print_operations_history() {
+        // GIVEN
+        // WHEN
+    	customerAccount.printHistoryOperations();
+        // THEN
+        verify(statement, times(1)).getStatementLines();
+    }
+    
 }

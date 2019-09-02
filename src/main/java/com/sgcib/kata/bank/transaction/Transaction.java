@@ -1,15 +1,31 @@
 package com.sgcib.kata.bank.transaction;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Objects;
 
 import javax.money.MonetaryAmount;
+import javax.money.format.AmountFormatQueryBuilder;
+import javax.money.format.MonetaryAmountFormat;
+import javax.money.format.MonetaryFormats;
+
+import org.javamoney.moneta.format.CurrencyStyle;
 
 /**
  * @author fahmi
  *
  */
 public class Transaction {
+	
+	private static final String COLUMN_SEPARATOR = " | ";
+	private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	private static final MonetaryAmountFormat amountFormatter = MonetaryFormats.getAmountFormat(
+		      AmountFormatQueryBuilder.of(Locale.FRANCE)
+		        .set(CurrencyStyle.SYMBOL)
+		        .build()
+		    );
+
 
 	private MonetaryAmount amount;
 	private LocalDateTime date;
@@ -32,6 +48,17 @@ public class Transaction {
     public OperationType getOperationType() {
         return operationType;
     }
+    
+    public void print(MonetaryAmount balance) {
+		System.out.println(this.getOperationType().name()
+                + COLUMN_SEPARATOR
+                + dateFormatter.format(this.getDate())
+                + COLUMN_SEPARATOR
+                + amountFormatter.format(this.getAmount())
+                + COLUMN_SEPARATOR
+                + amountFormatter.format(balance)
+        );
+	}
 
     @Override
     public boolean equals(Object o) {
