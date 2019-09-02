@@ -32,7 +32,10 @@ public class Statement {
 	
 	public void add(OperationType operationType, MonetaryAmount amount, LocalDateTime dateTime) {
 		Transaction transaction = new Transaction(amount, dateTime, operationType);
-		addNewStatementLine(transaction);
+		if (amount.isPositive())
+			addNewStatementLine(transaction);
+		else
+			System.err.println("Impossible transaction : negative amount");
 	}
 
 	public void addNewStatementLine(Transaction transaction) {
